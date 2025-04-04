@@ -25,7 +25,7 @@ steps:
 
     # Fetch all VPCs
     gcloud compute networks list --filter="creationTimestamp<=-p4h00m" \
-        --project=gke-ai-eco-dev --format="table(name)" | while IFS= read -r i; do
+        --project=ai-on-gke-qss --format="table(name)" | while IFS= read -r i; do
         echo "#########################"
         echo "WIP Network === ${i}"
 
@@ -45,14 +45,14 @@ steps:
             continue
         fi
 
-        gcloud compute networks subnets list --project=gke-ai-eco-dev --filter="network:$i" --format="table(name, region)" | while IFS= read -r j; do
+        gcloud compute networks subnets list --project=ai-on-gke-qss --filter="network:$i" --format="table(name, region)" | while IFS= read -r j; do
             if [[ $j =~ ^NAME[[:space:]]+REGION[[:space:]]*$ ]]; then
                 echo "Ignore Subnet === $j!"
                 continue
             fi
 
             IFS=' ' read -r name region <<< "$j"
-            gcloud compute networks subnets delete --project=gke-ai-eco-dev --region=$region $name --quiet
+            gcloud compute networks subnets delete --project=ai-on-gke-qss --region=$region $name --quiet
             echo "Deleted network subnet === $region/$name"
         done
 
@@ -62,7 +62,7 @@ steps:
                 continue
             fi
 
-            gcloud compute networks peerings delete --project=gke-ai-eco-dev "$j" --network=$i --quiet
+            gcloud compute networks peerings delete --project=ai-on-gke-qss "$j" --network=$i --quiet
             echo "Deleted peering === $j"
         done
 
@@ -72,7 +72,7 @@ steps:
                 continue
             fi
 
-            gcloud compute addresses delete --project=gke-ai-eco-dev "$j" --global --quiet
+            gcloud compute addresses delete --project=ai-on-gke-qss "$j" --global --quiet
             echo "Deleted address === $j"
         done
 
@@ -82,23 +82,20 @@ steps:
                 continue
             fi
 
-            gcloud compute routes delete --project=gke-ai-eco-dev "$j" --quiet
+            gcloud compute routes delete --project=ai-on-gke-qss "$j" --quiet
             echo "Deleted route === $j"
         done
 
-        gcloud compute networks get-effective-firewalls "$i" --project=gke-ai-eco-dev --format="table(name)" | while IFS= read -r j; do
+        gcloud compute networks get-effective-firewalls "$i" --project=ai-on-gke-qss --format="table(name)" | while IFS= read -r j; do
             if [[ $j == 'default' || $j == 'NAME' ]]; then
                 echo "Ignore FW Rules === $j!"
                 continue
             fi
 
-            gcloud compute firewall-rules delete --project=gke-ai-eco-dev "${j}" --quiet
+            gcloud compute firewall-rules delete --project=ai-on-gke-qss "${j}" --quiet
             echo "Deleted network attached firewall rules === ${j}"
         done
 
-        gcloud compute networks delete $i --project=gke-ai-eco-dev --quiet
+        gcloud compute networks delete $i --project=ai-on-gke-qss --quiet
         echo "Deleted network === $i"
     done
-
-
-
