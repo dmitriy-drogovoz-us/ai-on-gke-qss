@@ -24,8 +24,8 @@ steps:
     echo "Hello $_USER"
 
     # Fetch all VPCs
-    # gcloud compute networks list --filter="creationTimestamp<=-p4h00m" \
-    gcloud compute networks list \
+    gcloud compute networks list --filter="creationTimestamp<=-p0h05m" \
+    # gcloud compute networks list \
         --project=ai-on-gke-qss --format="table(name)" | while IFS= read -r i; do
         echo "#########################"
         echo "WIP Network === ${i}"
