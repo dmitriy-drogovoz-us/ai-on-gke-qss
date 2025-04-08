@@ -13,7 +13,7 @@
 # limitations under the License.
 
 steps:
-- id: "validate platform"
+- id: "validate platform 1"
   name: "hashicorp/terraform:latest"
   # name: "gcr.io/$PROJECT_ID/terraform"
   secretEnv: ['KAGGLE_USERNAME', 'KAGGLE_KEY']
@@ -22,7 +22,7 @@ steps:
   dir: "infrastructure/"
   waitFor: ["-"]
 
-- id: "validate platform"
+- id: "validate platform 2"
   name: "ubuntu"
   # name: "gcr.io/$PROJECT_ID/terraform"
   secretEnv: ['KAGGLE_USERNAME', 'KAGGLE_KEY']
@@ -31,7 +31,7 @@ steps:
   dir: "infrastructure/"
   waitFor: ["-"]
 
-- id: "validate platform"
+- id: "validate platform 3"
   name: "gcr.io/cloud-builders/docker"
   # name: "gcr.io/$PROJECT_ID/terraform"
   secretEnv: ['KAGGLE_USERNAME', 'KAGGLE_KEY']
