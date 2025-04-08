@@ -17,7 +17,14 @@ steps:
   name: "hashicorp/terraform:latest"
   # name: "gcr.io/$PROJECT_ID/terraform"
   secretEnv: ['KAGGLE_USERNAME', 'KAGGLE_KEY']
-  script: |
+  env:
+  - "KUBE_LOAD_CONFIG_FILE=false"
+  entrypoint: 'sh'
+  args:
+  - '-c'
+  - |
+    set -e
+
     echo "KAGGLE_USERNAME=${KAGGLE_USERNAME}"
     echo "SHORT_SHA=${SHORT_SHA}"
     echo "_PR_NUMBER=${_PR_NUMBER}"
