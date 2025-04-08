@@ -18,27 +18,34 @@ steps:
   # name: "gcr.io/$PROJECT_ID/terraform"
   secretEnv: ['KAGGLE_USERNAME', 'KAGGLE_KEY']
   script: |
-    echo $KAGGLE_USERNAME
+    echo "KAGGLE_USERNAME=${KAGGLE_USERNAME}"
+    echo "SHORT_SHA=${SHORT_SHA}"
+    echo "_PR_NUMBER=${_PR_NUMBER}"
+    echo "_BUILD_ID=${_BUILD_ID}"
+    echo "BUILD_ID=${BUILD_ID}"
+    echo "_AUTOPILOT_CLUSTER=${_AUTOPILOT_CLUSTER}"
+    echo "_REGION=${_REGION}"
+    echo "That's all!"
   dir: "infrastructure/"
   waitFor: ["-"]
 
-- id: "validate platform 2"
-  name: "ubuntu"
-  # name: "gcr.io/$PROJECT_ID/terraform"
-  secretEnv: ['KAGGLE_USERNAME', 'KAGGLE_KEY']
-  script: |
-    echo $KAGGLE_USERNAME
-  dir: "infrastructure/"
-  waitFor: ["-"]
+# - id: "validate platform 2"
+#   name: "ubuntu"
+#   # name: "gcr.io/$PROJECT_ID/terraform"
+#   secretEnv: ['KAGGLE_USERNAME', 'KAGGLE_KEY']
+#   script: |
+#     echo $KAGGLE_USERNAME
+#   dir: "infrastructure/"
+#   waitFor: ["-"]
 
-- id: "validate platform 3"
-  name: "gcr.io/cloud-builders/docker"
-  # name: "gcr.io/$PROJECT_ID/terraform"
-  secretEnv: ['KAGGLE_USERNAME', 'KAGGLE_KEY']
-  script: |
-    echo $KAGGLE_USERNAME
-  dir: "infrastructure/"
-  waitFor: ["-"]
+# - id: "validate platform 3"
+#   name: "gcr.io/cloud-builders/docker"
+#   # name: "gcr.io/$PROJECT_ID/terraform"
+#   secretEnv: ['KAGGLE_USERNAME', 'KAGGLE_KEY']
+#   script: |
+#     echo $KAGGLE_USERNAME
+#   dir: "infrastructure/"
+#   waitFor: ["-"]
 
 substitutions:
   _REGION: us-east4
