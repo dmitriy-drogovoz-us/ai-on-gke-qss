@@ -14,7 +14,8 @@
 
 steps:
 - id: "validate platform"
-  name: "gcr.io/$PROJECT_ID/terraform"
+  # name: "gcr.io/$PROJECT_ID/terraform"
+  name: "hashicorp/terraform:latest"
   script: |
     terraform init -no-color
     terraform validate -no-color
@@ -22,7 +23,8 @@ steps:
   waitFor: ["-"]
 
 - id: "validate ray"
-  name: "gcr.io/$PROJECT_ID/terraform"
+  # name: "gcr.io/$PROJECT_ID/terraform"
+  name: "hashicorp/terraform:latest"
   script: |
     terraform init -no-color
     terraform validate -no-color
@@ -30,7 +32,8 @@ steps:
   waitFor: ["validate platform"]
 
 - id: "validate jupyterhub"
-  name: "gcr.io/$PROJECT_ID/terraform"
+  # name: "gcr.io/$PROJECT_ID/terraform"
+  name: "hashicorp/terraform:latest"
   script: |
     terraform init -no-color
     terraform validate -no-color
@@ -38,7 +41,8 @@ steps:
   waitFor: ["validate platform"]
 
 - id: "validate rag"
-  name: "gcr.io/$PROJECT_ID/terraform"
+  # name: "gcr.io/$PROJECT_ID/terraform"
+  name: "hashicorp/terraform:latest"
   script: |
     terraform init -no-color
     terraform validate -no-color
@@ -46,7 +50,8 @@ steps:
   waitFor: ["validate platform"]
 
 - id: 'create gke cluster'
-  name: 'gcr.io/$PROJECT_ID/terraform'
+  # name: 'gcr.io/$PROJECT_ID/terraform'
+  name: "hashicorp/terraform:latest"
   env:
   - "KUBE_LOAD_CONFIG_FILE=false"
   entrypoint: 'sh'
@@ -73,7 +78,8 @@ steps:
   waitFor: ['validate platform', 'validate ray', 'validate jupyterhub', validate rag]
 
 - id: 'test ray cluster'
-  name: 'gcr.io/$PROJECT_ID/terraform'
+  # name: 'gcr.io/$PROJECT_ID/terraform'
+  name: "hashicorp/terraform:latest"
   entrypoint: 'sh'
   args:
   - '-c'
@@ -116,7 +122,8 @@ steps:
   waitFor: ['create gke cluster']
 
 - id: 'cleanup ray cluster'
-  name: 'gcr.io/$PROJECT_ID/terraform'
+  # name: 'gcr.io/$PROJECT_ID/terraform'
+  name: "hashicorp/terraform:latest"
   entrypoint: 'bash'
   args:
   - '-c'
@@ -138,7 +145,8 @@ steps:
   waitFor: ['test ray cluster']
 
 - id: 'test jupyterhub'
-  name: 'gcr.io/$PROJECT_ID/terraform'
+  # name: 'gcr.io/$PROJECT_ID/terraform'
+  name: "hashicorp/terraform:latest"
   entrypoint: 'bash'
   args:
   - '-c'
@@ -173,7 +181,8 @@ steps:
   waitFor: ['create gke cluster']
 
 - id: 'cleanup jupyterhub'
-  name: 'gcr.io/$PROJECT_ID/terraform'
+  # name: 'gcr.io/$PROJECT_ID/terraform'
+  name: "hashicorp/terraform:latest"
   entrypoint: 'bash'
   args:
   - '-c'
@@ -194,7 +203,8 @@ steps:
   waitFor: ['test jupyterhub']
 
 - id: 'test rag'
-  name: 'gcr.io/$PROJECT_ID/terraform'
+  # name: 'gcr.io/$PROJECT_ID/terraform'
+  name: "hashicorp/terraform:latest"
   entrypoint: 'sh'
   secretEnv: ['KAGGLE_USERNAME', 'KAGGLE_KEY']
   args:
@@ -279,7 +289,8 @@ steps:
   waitFor: ['create gke cluster']
 
 - id: 'Generate Kubeconfig'
-  name: 'gcr.io/cloud-builders/gcloud'
+  # name: 'gcr.io/cloud-builders/gcloud'
+  name: 'google/cloud-sdk:latest'
   env:
   - 'KUBECONFIG=/workspace/kubeconfig'
   - 'USE_GKE_GCLOUD_AUTH_PLUGIN=False'
@@ -357,7 +368,8 @@ steps:
   waitFor: ['Copy metadata']
 
 - id: 'cleanup rag'
-  name: 'gcr.io/$PROJECT_ID/terraform'
+  # name: 'gcr.io/$PROJECT_ID/terraform'
+  name: "hashicorp/terraform:latest"
   entrypoint: 'bash'
   args:
   - '-c'
@@ -385,7 +397,8 @@ steps:
   waitFor: ['Run shipshape on cluster', 'Run Shipshape on helm']
 
 - id: 'cleanup gke cluster'
-  name: 'gcr.io/$PROJECT_ID/terraform'
+  # name: 'gcr.io/$PROJECT_ID/terraform'
+  name: "hashicorp/terraform:latest"
   entrypoint: 'bash'
   args:
   - '-c'
@@ -404,7 +417,8 @@ steps:
   waitFor: ['cleanup rag', 'cleanup jupyterhub', 'cleanup ray cluster']
 
 - id: 'check result'
-  name: 'gcr.io/$PROJECT_ID/terraform'
+  # name: 'gcr.io/$PROJECT_ID/terraform'
+  name: "hashicorp/terraform:latest"
   entrypoint: 'bash'
   args:
   - '-c'
@@ -458,12 +472,12 @@ steps:
       echo "rag prompt test failed"
       exit 1
     fi
-    
+
     if grep -q "Validation failed" /workspace/shipshape_on_cluster.txt; then
       echo "Shipshape on cluster scan validation failed, please check the log. knowledge share slides: go/shipshape-ai-on-gke-slide"
       exit 1
     fi
-    
+
     if grep -q "Validation failed" /workspace/shipshape_on_helm.txt; then
       echo "Shipshape on helm scan validation failed, please check the log. knowledge share slides: go/shipshape-ai-on-gke-slide"
       exit 1
@@ -476,14 +490,14 @@ substitutions:
   _AUTOPILOT_CLUSTER: "false"
   _BUILD_ID: ${BUILD_ID:0:8}
   _SHIPSHAPE_IMAGE: us-docker.pkg.dev/k8ssecurityvalidation-agent/k8ssecurityvalidation-agent/k8ssecurityvalidation-agent@sha256:cd45e6cd84e9a45462ddbca18c4731fd4e264d517ee98131eb5be4eb57691f44
-logsBucket: gs://ai-on-gke-build-logs
+logsBucket: gs://ai-on-gke-qss-build-logs
 options:
   substitutionOption: "ALLOW_LOOSE"
   machineType: "E2_HIGHCPU_8"
 timeout: 5400s
 availableSecrets:
   secretManager:
-  - versionName: projects/gke-ai-eco-dev/secrets/cloudbuild-kaggle-username/versions/latest
+  - versionName: projects/ai-on-gke-qss/secrets/cloudbuild-kaggle-username/versions/latest
     env: "KAGGLE_USERNAME"
-  - versionName: projects/gke-ai-eco-dev/secrets/cloudbuild-kaggle-key/versions/latest
+  - versionName: projects/ai-on-gke-qss/secrets/cloudbuild-kaggle-key/versions/latest
     env: "KAGGLE_KEY"
