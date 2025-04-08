@@ -25,7 +25,7 @@ steps:
   - |
     set -e
 
-    echo "KAGGLE_USERNAME=${KAGGLE_USERNAME}"
+    echo "KAGGLE_USERNAME=${_KAGGLE_USERNAME}"
     echo "SHORT_SHA=${SHORT_SHA}"
     echo "_PR_NUMBER=${_PR_NUMBER}"
     echo "_BUILD_ID=${_BUILD_ID}"
@@ -55,6 +55,7 @@ steps:
 #   waitFor: ["-"]
 
 substitutions:
+  _KAGGLE_USERNAME: test
   _REGION: us-east4
   _USER_NAME: github
   _AUTOPILOT_CLUSTER: "false"
