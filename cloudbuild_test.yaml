@@ -22,6 +22,24 @@ steps:
   dir: "infrastructure/"
   waitFor: ["-"]
 
+- id: "validate platform"
+  name: "ubuntu"
+  # name: "gcr.io/$PROJECT_ID/terraform"
+  secretEnv: ['KAGGLE_USERNAME', 'KAGGLE_KEY']
+  script: |
+    echo $KAGGLE_USERNAME
+  dir: "infrastructure/"
+  waitFor: ["-"]
+
+- id: "validate platform"
+  name: "gcr.io/cloud-builders/docker"
+  # name: "gcr.io/$PROJECT_ID/terraform"
+  secretEnv: ['KAGGLE_USERNAME', 'KAGGLE_KEY']
+  script: |
+    echo $KAGGLE_USERNAME
+  dir: "infrastructure/"
+  waitFor: ["-"]
+
 substitutions:
   _REGION: us-east4
   _USER_NAME: github
