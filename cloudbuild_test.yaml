@@ -14,8 +14,8 @@
 
 steps:
 - id: "validate platform"
-  name: "hashicorp/terraform:latest"
-  # name: "gcr.io/$PROJECT_ID/terraform"
+  # name: "hashicorp/terraform:latest"
+  name: "gcr.io/$PROJECT_ID/terraform"
   secretEnv: ['KAGGLE_USERNAME', 'KAGGLE_KEY']
   script: |
     echo $KAGGLE_USERNAME
