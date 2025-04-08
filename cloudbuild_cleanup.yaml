@@ -99,5 +99,5 @@ steps:
         gcloud compute networks delete $i --project=ai-on-gke-qss --quiet
         echo "Deleted network === $i"
     done
-options:
-  logging: CLOUD_LOGGING_ONLY
+# options:
+#   logging: CLOUD_LOGGING_ONLY
