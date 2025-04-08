@@ -14,6 +14,7 @@
 
 steps:
 - id: "validate platform"
+  name: "Test step"
   # name: "gcr.io/$PROJECT_ID/terraform"
   secretEnv: ['KAGGLE_USERNAME', 'KAGGLE_KEY']
   script: |
